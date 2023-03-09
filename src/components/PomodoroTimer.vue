@@ -1,16 +1,60 @@
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { reactive, computed } from 'vue'
 
 interface Timer {
-  time: string
+  minutesLeft: number
+  secondsLeft: number
+  isActive: boolean
 }
 
-const timer: Timer = reactive({ time: '25:00' })
+const timer: Timer = reactive({ minutesLeft: 0, secondsLeft: 3, isActive: false })
+
+const timeLeft = computed<string>(() => {
+  let minutesText: string = `${timer.minutesLeft}`
+  let secondsText: string = `${timer.secondsLeft}`
+
+  if (timer.minutesLeft < 10) {
+    minutesText = '0' + minutesText
+  }
+
+  if (timer.secondsLeft < 10) {
+    secondsText = '0' + secondsText
+  }
+
+  return `${minutesText}:${secondsText}`
+})
+
+function startTimer(): void {
+  timer.isActive = true
+}
+
+let countdownHandler: Function = () => {
+  if (!timer.isActive) {
+    return
+  }
+
+  if (timer.minutesLeft == 0 && timer.secondsLeft == 0) {
+    alert("You pomodoro'd!")
+    timer.isActive = false
+    return
+  }
+
+  if (timer.secondsLeft == 0) {
+    timer.secondsLeft = 60
+    timer.minutesLeft--
+  }
+
+  timer.secondsLeft--
+}
+
+setInterval(countdownHandler, 1000)
 </script>
 
 <template>
-  <h1 class="greetings">Hello!</h1>
-  <h2>{{ timer.time }}</h2>
+  <h1 class="greetings">Ready to Pomo Those Doro's?</h1>
+  <h2>{{ timeLeft }}</h2>
+  <h2>{{ timer.isActive }}</h2>
+  <button @click="startTimer">Start Pomodoro!</button>
 </template>
 
 <style scoped>
