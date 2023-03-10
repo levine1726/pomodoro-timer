@@ -7,7 +7,13 @@ interface Timer {
   isActive: boolean
 }
 
+interface PomodoroInfo {
+  completedPomodoros: number
+  desiredPomodoros: number
+}
+
 const timer: Timer = reactive({ minutesLeft: 0, secondsLeft: 3, isActive: false })
+const pomodoroInfo: PomodoroInfo = reactive({ completedPomodoros: 0, desiredPomodoros: 6 })
 
 const timeLeft = computed<string>(() => {
   let minutesText: string = `${timer.minutesLeft}`
@@ -36,6 +42,7 @@ let countdownHandler: Function = () => {
   if (timer.minutesLeft == 0 && timer.secondsLeft == 0) {
     alert("You pomodoro'd!")
     timer.isActive = false
+    pomodoroInfo.completedPomodoros++
     return
   }
 
@@ -53,7 +60,8 @@ setInterval(countdownHandler, 1000)
 <template>
   <h1 class="greetings">Ready to Pomo Those Doro's?</h1>
   <h2>{{ timeLeft }}</h2>
-  <h2>{{ timer.isActive }}</h2>
+  <h2>Is Active: {{ timer.isActive }}</h2>
+  <h2>Completed Pomodoros: {{ pomodoroInfo.completedPomodoros }}</h2>
   <button @click="startTimer">Start Pomodoro!</button>
 </template>
 
