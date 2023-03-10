@@ -50,13 +50,17 @@ function startTimer(): void {
   timer.isActive = true
 }
 
+function pauseTimer(): void {
+  timer.isActive = false
+}
+
 function handleTimerEnd(): void {
   if (pomodoroInfo.isBreakActive) {
-    alert('Starting new pomodoro')
+    console.log('Starting new pomodoro')
     pomodoroInfo.isBreakActive = false
     timer.minutesLeft = pomodoroInfo.pomodoroLength
   } else {
-    alert("You pomodoro'd!")
+    console.log("You pomodoro'd!")
     pomodoroInfo.completedPomodoros++
     pomodoroInfo.isBreakActive = true
     timer.minutesLeft = pomodoroInfo.shortBreakLength
@@ -91,6 +95,7 @@ setInterval(countdownHandler, 1000)
   <h2>Is Break Active: {{ pomodoroInfo.isBreakActive }}</h2>
   <h2>Completed Pomodoros: {{ pomodoroInfo.completedPomodoros }}</h2>
   <button @click="startTimer">Start Pomodoro!</button>
+  <button @click="pauseTimer">Pause Timer</button>
 </template>
 
 <style scoped>
